@@ -1,8 +1,8 @@
 # mkdocs.yml — Material for MkDocs “kitchen sink” template
 
 site_name: Stream Language Docs
-#site_description:
-#site_url:
+site_description: Docs for the Stream language.
+site_url: https://OfekGrunfeld.github.io/stream/
 
 repo_name: OfekGrunfeld/stream
 repo_url: https://github.com/OfekGrunfeld/stream

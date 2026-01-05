@@ -39,4 +39,5 @@ venv
 # ruff
 .ruff_cache/
 
-
+# hatch-vcs
+*_version.py

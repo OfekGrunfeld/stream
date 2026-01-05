@@ -7,7 +7,11 @@ name = "stream"
 dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pydantic>=2.12.5",
+    "rich>=14.2.0",
+    "typer>=0.21.0",
+]
 
 [project.scripts]
 stream = "stream.__main__:main"
@@ -15,6 +19,7 @@ stream = "stream.__main__:main"
 [tool.hatch.version]
 source = "vcs"
 fallback-version = "0.0.0"
+raw-options = { version_scheme = "no-guess-dev", local_scheme = "no-local-version" }
 
 [tool.hatch.build.hooks.vcs]
 version-file = "src/stream/_version.py"

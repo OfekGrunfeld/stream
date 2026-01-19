@@ -18,6 +18,9 @@ dev = [
     "ruff>=0.9.0",
     "mypy>=1.8.0",
 ]
+test = [
+  "pytest>=8.0",
+]
 
 [project.scripts]
 stream = "stream.__main__:main"

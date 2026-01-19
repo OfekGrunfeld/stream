@@ -40,6 +40,7 @@ packages = ["src/stream"]
 [tool.ruff]
 line-length = 100
 src = ["src"]
+unsafe-fixes = true
 
 [tool.ruff.format]
 quote-style = "double"
@@ -48,6 +49,13 @@ indent-style = "space"
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
 fixable = ["ALL"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["stream"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = ["F401"]
+
 
 # mypy
 [tool.mypy]

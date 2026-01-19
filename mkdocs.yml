@@ -1,0 +1,135 @@
+# mkdocs.yml — Material for MkDocs “kitchen sink” template
+
+site_name: Stream
+site_description: Docs for the Stream language.
+site_url: https://OfekGrunfeld.github.io/stream/
+
+repo_name: OfekGrunfeld/stream
+repo_url: https://github.com/OfekGrunfeld/stream
+edit_uri: edit/main/docs/
+
+# Optional: good for deployments where the site isn't at domain root
+# use_directory_urls: true
+
+theme:
+  name: material
+  language: en
+  logo: assets/logo.png
+  favicon: assets/favicon.png
+
+  # If you want theme overrides (partials, custom templates):
+  # custom_dir: overrides  # :contentReference[oaicite:1]{index=1}
+
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+  icon:
+    repo: fontawesome/brands/github
+    # Optional: tag icons (requires extra.tags identifiers below) :contentReference[oaicite:2]{index=2}
+    tag:
+      default: material/tag
+      compat: material/check-decagram
+      perf: material/speedometer
+
+  features:
+    # Navigation / UX
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer  # opt-in in newer versions :contentReference[oaicite:3]{index=3}
+
+    # Table of contents
+    - toc.follow
+    - toc.integrate
+
+    # Search experience
+    - search.suggest
+    - search.highlight
+    - search.share
+
+    # Content affordances
+    - content.code.copy        # opt-in in newer versions :contentReference[oaicite:4]{index=4}
+    - content.action.edit      # opt-in in newer versions :contentReference[oaicite:5]{index=5}
+    - content.action.view      # opt-in in newer versions :contentReference[oaicite:6]{index=6}
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/OfekGrunfeld/stream
+
+  # Tag identifiers (optional) :contentReference[oaicite:7]{index=7}
+  tags:
+    Compatibility: compat
+    Performance: perf
+
+# Nice-to-have: add small tweaks without touching templates
+#extra_css:
+#  - styles/extra.css
+#extra_javascript:
+#  - javascripts/extra.js
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - meta
+
+  # Pymdown Extensions (Material plays very nicely with these)
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.keys
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  # When you list plugins explicitly, keep search in the list :contentReference[oaicite:8]{index=8}
+  - search:
+      lang: en
+
+  # Built-in Material plugins
+  - tags  # :contentReference[oaicite:9]{index=9}
+  - meta  # useful for front matter defaults; must come before blog in some setups :contentReference[oaicite:10]{index=10}
+  - social  # social cards (needs pillow + cairosvg installed) :contentReference[oaicite:12]{index=12}
+
+  # Last-updated timestamps from git history
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+      fallback_to_build_date: true
+      # See plugin options if you want more control :contentReference[oaicite:13]{index=13}
+
+nav:
+  - Home: index.md
+
+
+# Optional strictness:
+# strict: true

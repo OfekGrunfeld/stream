@@ -1060,7 +1060,7 @@ wheels = [
 ]
 
 [[package]]
-name = "stream"
+name = "stream-lang"
 source = { editable = "." }
 dependencies = [
     { name = "pydantic" },

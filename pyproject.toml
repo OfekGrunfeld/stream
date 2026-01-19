@@ -21,11 +21,6 @@ dev = [
 test = [
   "pytest>=8.0",
 ]
-
-[project.scripts]
-stream = "stream.__main__:main"
-
-[project.optional-dependencies]
 docs = [
     "cairosvg>=2.8.2",
     "ghp-import>=2.1.0",
@@ -34,6 +29,9 @@ docs = [
     "mkdocs-rss-plugin>=1.17.7",
     "pillow>=12.1.0",
 ]
+
+[project.scripts]
+stream = "stream.__main__:main"
 
 [tool.hatch.version]
 source = "vcs"

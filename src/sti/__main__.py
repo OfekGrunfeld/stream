@@ -1,8 +1,8 @@
 import sys
 from pathlib import Path
 
-from sti.parse.program import parse_program
 from sti.meta.program import Program
+from sti.parse.program import parse_program
 
 
 def run(prog: Program) -> None:

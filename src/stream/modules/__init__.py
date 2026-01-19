@@ -1,18 +1,16 @@
 import pkgutil
 from importlib import import_module
-from typing import Any, Dict
+from typing import Any
 
 # Map Python module names -> language module keys
-ALIASES: Dict[str, str] = {
-    "self": "o"
-}
+ALIASES: dict[str, str] = {"self": "o"}
 
 
-def _discover_modules() -> Dict[str, Any]:
-    modules: Dict[str, Any] = {}
+def _discover_modules() -> dict[str, Any]:
+    modules: dict[str, Any] = {}
 
     # Iterate over stream.modules.* submodules
-    for m in pkgutil.iter_modules(__path__):  # type: ignore[name-defined]
+    for m in pkgutil.iter_modules(__path__):
         name = m.name
         if name.startswith("_"):
             continue
@@ -30,6 +28,6 @@ def _discover_modules() -> Dict[str, Any]:
     return modules
 
 
-MODULES: Dict[str, Any] = _discover_modules()
+MODULES: dict[str, Any] = _discover_modules()
 
 __all__ = ["MODULES", "ALIASES"]

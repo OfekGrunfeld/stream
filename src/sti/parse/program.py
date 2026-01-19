@@ -1,8 +1,9 @@
-from typing import Dict, Callable, Any, Tuple, List
+from collections.abc import Callable
+from typing import Any
 
 from sti.imports.resolve import resolve_import
 from sti.meta.program import Program
-from stream.builtins.functions import SPRING_START_RE, SPRING_END_RE
+from stream.builtins.functions import SPRING_END_RE, SPRING_START_RE
 from stream.builtins.keywords import GYGE_DECL_RE, INLINE_COMMENT
 from stream.builtins.operators import ASSIGN_RE
 from stream.program.poc import PIPELINE_RE
@@ -11,8 +12,8 @@ from stream.program.poc import PIPELINE_RE
 def parse_program(text: str) -> Program:
     season: str | None = None
     drift: str | None = None
-    gyges: Dict[str, Callable[[Any], Any]] = {}
-    spring_pipeline: Tuple[str, str] | None = None
+    gyges: dict[str, Callable[[Any], Any]] = {}
+    spring_pipeline: tuple[str, str] | None = None
 
     lines = text.splitlines()
     i = 0
@@ -36,7 +37,9 @@ def parse_program(text: str) -> Program:
             import_spec = m.group(2).strip()
             target = resolve_import(import_spec)
             if not callable(target):
-                raise ValueError(f"Imported target for gyge {name!r} is not callable: {import_spec!r}")
+                raise ValueError(
+                    f"Imported target for gyge {name!r} is not callable: {import_spec!r}"
+                )
             gyges[name] = target
             continue
 
@@ -53,7 +56,7 @@ def parse_program(text: str) -> Program:
         # spring block
         if SPRING_START_RE.match(raw):
             # collect until }
-            block: List[str] = []
+            block: list[str] = []
             while i < len(lines) and not SPRING_END_RE.match(lines[i]):
                 block_line = lines[i].strip()
                 i += 1
@@ -67,7 +70,9 @@ def parse_program(text: str) -> Program:
 
             # v0: allow exactly one pipeline line in spring
             if len(block) != 1:
-                raise ValueError(f"v0 supports exactly one line in spring block, got {len(block)} lines")
+                raise ValueError(
+                    f"v0 supports exactly one line in spring block, got {len(block)} lines"
+                )
 
             pm = PIPELINE_RE.match(block[0])
             if not pm:

@@ -1,4 +1,5 @@
-from typing import Any, Callable, Dict, Tuple
+from collections.abc import Callable
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -6,5 +7,5 @@ from pydantic import BaseModel
 class Program(BaseModel):
     season: str | None
     drift: str | None
-    gyges: Dict[str, Callable[[Any], Any]]
-    spring_pipeline: Tuple[str, str]
+    gyges: dict[str, Callable[[Any], Any]]
+    spring_pipeline: tuple[str, str]

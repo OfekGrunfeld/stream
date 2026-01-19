@@ -18,8 +18,8 @@ def resolve_import(spec: str) -> Any:
     if not spec.startswith("<") or ">" not in spec:
         raise ValueError(f"Bad import syntax: {spec!r}")
 
-    mod_name = spec[1:spec.index(">")]
-    rest = spec[spec.index(">") + 1:]
+    mod_name = spec[1 : spec.index(">")]
+    rest = spec[spec.index(">") + 1 :]
     parts = [p for p in rest.split("::") if p]  # drop empty
 
     obj = MODULES.get(mod_name)
@@ -48,7 +48,7 @@ def _step(obj: Any, key: str, spec: str) -> Any:
 
     # 4) Last-resort: mapping protocol (for custom containers)
     try:
-        return obj[key]  # type: ignore[index]
+        return obj[key]
     except Exception:
         pass
 

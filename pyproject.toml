@@ -42,7 +42,7 @@ raw-options = { version_scheme = "no-guess-dev", local_scheme = "no-local-versio
 version-file = "src/stream/_version.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/stream"]
+packages = ["src/stream", "src/sti"]
 
 # Ruff
 [tool.ruff]

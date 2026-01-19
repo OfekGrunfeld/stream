@@ -1,6 +1,6 @@
 # mkdocs.yml — Material for MkDocs “kitchen sink” template
 
-site_name: Stream Language Docs
+site_name: Stream
 site_description: Docs for the Stream language.
 site_url: https://OfekGrunfeld.github.io/stream/
 
@@ -129,13 +129,7 @@ plugins:
 
 nav:
   - Home: index.md
-  - Guide:
-      - Overview: guide/overview.md
-      - Install: guide/install.md
-      - Usage: guide/usage.md
-  - Reference:
-      - CLI: reference/cli.md
-      - Config: reference/config.md
+
 
 # Optional strictness:
 # strict: true

@@ -1,5 +1,5 @@
-from ..os import fd
+from ..os import fd as os_fd
 
-___export___ = [
-    fd
-]
+___export___ = {
+    "fd": os_fd,
+}

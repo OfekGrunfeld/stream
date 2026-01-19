@@ -1,5 +1,6 @@
-from pty import STDOUT_FILENO
+import sys
+from typing import Any
 
-fd = {
-    "stdout": STDOUT_FILENO,
-}
+
+def stdout(value: Any) -> None:
+    print(value, flush=True, file=sys.stdout)

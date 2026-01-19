@@ -4,7 +4,7 @@ from sti.imports.resolve import resolve_import
 from sti.meta.program import Program
 from stream.builtins.functions import SPRING_START_RE, SPRING_END_RE
 from stream.builtins.keywords import GYGE_DECL_RE, INLINE_COMMENT
-from stream.builtins.modifiers import ASSIGN_RE
+from stream.builtins.operators import ASSIGN_RE
 from stream.program.poc import PIPELINE_RE
 
 
@@ -18,7 +18,7 @@ def parse_program(text: str) -> Program:
     i = 0
 
     def is_inline_comment(line: str) -> bool:
-        return line.strip().startswith(INLINE_COMMENT)
+        return INLINE_COMMENT.match(line.strip()) is not None
 
     while i < len(lines):
         raw = lines[i]

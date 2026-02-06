@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://OfekGrunfeld.github.io/stream/</loc>
+         <lastmod>2026-02-06</lastmod>
+    </url>
+    <url>
+         <loc>https://OfekGrunfeld.github.io/stream/guide/install/</loc>
+         <lastmod>2026-02-06</lastmod>
+    </url>
+    <url>
+         <loc>https://OfekGrunfeld.github.io/stream/guide/overview/</loc>
+         <lastmod>2026-02-06</lastmod>
+    </url>
+    <url>
+         <loc>https://OfekGrunfeld.github.io/stream/guide/usage/</loc>
+         <lastmod>2026-02-06</lastmod>
+    </url>
+    <url>
+         <loc>https://OfekGrunfeld.github.io/stream/reference/cli/</loc>
+         <lastmod>2026-02-06</lastmod>
+    </url>
+    <url>
+         <loc>https://OfekGrunfeld.github.io/stream/reference/config/</loc>
+         <lastmod>2026-02-06</lastmod>
+    </url>
+</urlset>

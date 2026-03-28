@@ -318,22 +318,26 @@ def _build_token(  # noqa: PLR0911  (many returns is fine for dispatch)
         case "STREAM_FILTER":
             return tok(TokenKind.STREAM_FILTER)
         case "STREAM_FILTER_COND":
-            condition = m.group(m.lastindex or 1) if m.lastindex else ""
+            # raw = "-/|cond|\->"  →  condition between first and second |
+            parts = raw.split("|")
+            condition = parts[1] if len(parts) > 2 else ""
             return tok(TokenKind.STREAM_FILTER_COND, value=condition.strip())
         case "STREAM_SWITCH":
             return tok(TokenKind.STREAM_SWITCH)
         case "STREAM_BLOCKED":
             return tok(TokenKind.STREAM_BLOCKED)
         case "STREAM_THROTTLE":
-            plus_group = m.group(m.lastindex or 1) if m.lastindex else "+"
-            return tok(TokenKind.STREAM_THROTTLE, level=len(plus_group))
+            # raw = "-+>" / "-++>" etc.  level = number of '+' chars
+            return tok(TokenKind.STREAM_THROTTLE, level=raw.count("+"))
         case "STREAM_FAST":
-            return tok(TokenKind.STREAM_FAST, level=len(raw) - 2)  # count of extra >
+            # raw = "->>" / "->>>" etc.  level = extra '>' count beyond first
+            return tok(TokenKind.STREAM_FAST, level=raw.count(">") - 1)
         case "STREAM_WAIT":
-            groups = m.groups()
-            commas = groups[0] if groups else ","
-            condition = (groups[1] or "").strip() if len(groups) > 1 else ""
-            return tok(TokenKind.STREAM_WAIT, value=condition, level=len(commas))
+            # raw = "-(,+)(condition)?->"  extract comma count and condition text
+            inner = raw[1:-2]  # strip leading '-' and trailing '->'
+            level = len(inner) - len(inner.lstrip(","))
+            condition = inner.lstrip(",").strip()
+            return tok(TokenKind.STREAM_WAIT, value=condition, level=level)
         case "STREAM_BATCHER":
             return tok(TokenKind.STREAM_BATCHER)
         case "STREAM_SPLITTER":
@@ -356,12 +360,16 @@ def _build_token(  # noqa: PLR0911  (many returns is fine for dispatch)
 
         # ── Gyge primitives ─────────────────────────────────────────────
         case "GYGE":
-            hint = m.group(m.lastindex - 1) if m.lastindex and m.lastindex > 1 else ""
-            name = m.group(m.lastindex) if m.lastindex else raw.strip("|")
-            return tok(TokenKind.GYGE, value=name, value2=hint)
+            # raw = "|name|" or "|%name|" etc.
+            inner = raw[1:-1]  # strip surrounding pipes
+            if inner and inner[0] in "%@~?!#":
+                hint_char, name = inner[0], inner[1:]
+            else:
+                hint_char, name = "", inner
+            return tok(TokenKind.GYGE, value=name, value2=hint_char)
         case "GYGE_BYTE_ACCESS":
-            expr = m.group(1) if m.lastindex else raw[1:-1]
-            return tok(TokenKind.GYGE_BYTE_ACCESS, value=expr)
+            # raw = "[|name|expr]"
+            return tok(TokenKind.GYGE_BYTE_ACCESS, value=raw[1:-1])
         case "ALLOC":
             return tok(TokenKind.ALLOC)
         case "DEALLOC":
@@ -371,17 +379,26 @@ def _build_token(  # noqa: PLR0911  (many returns is fine for dispatch)
         case "THIS_PROGRAM":
             return tok(TokenKind.THIS_PROGRAM)
         case "IMPORT_STMT":
-            name = m.group(1) or ""
-            ns = m.group(2) or ""
+            # raw = "><name><" or "><name+ns><"
+            inner = raw[2:-2]
+            if "+" in inner:
+                name, ns = inner.split("+", 1)
+            else:
+                name, ns = inner, ""
             return tok(TokenKind.IMPORT_STMT, value=name, value2=ns)
 
         # ── Structure ────────────────────────────────────────────────────
         case "ASSIGN":
             return tok(TokenKind.ASSIGN)
         case "SECTION":
-            name = (m.group(1) or "").strip()
-            guard = (m.group(2) or "").strip()
-            return tok(TokenKind.SECTION, value=name, value2=guard)
+            # raw = "::name::" or "::name[guard]::"
+            inner = raw[2:-2]  # strip leading and trailing "::"
+            if "[" in inner:
+                name, rest = inner.split("[", 1)
+                guard = rest.rstrip("]")
+            else:
+                name, guard = inner, ""
+            return tok(TokenKind.SECTION, value=name.strip(), value2=guard.strip())
         case "COLONCOLON":
             return tok(TokenKind.COLONCOLON)
 
@@ -397,15 +414,20 @@ def _build_token(  # noqa: PLR0911  (many returns is fine for dispatch)
 
         # ── Targets ──────────────────────────────────────────────────────
         case "TARGET_PID":
-            return tok(TokenKind.TARGET_PID, value=m.group(1) or "")
+            # raw = "@pid:1337"
+            return tok(TokenKind.TARGET_PID, value=raw[5:])
         case "TARGET_PORT":
-            return tok(TokenKind.TARGET_PORT, value=m.group(1) or "")
+            # raw = "@port:8080"
+            return tok(TokenKind.TARGET_PORT, value=raw[6:])
         case "TARGET_NAME":
-            return tok(TokenKind.TARGET_NAME, value=m.group(1) or "")
+            # raw = '@name:"alice"'
+            return tok(TokenKind.TARGET_NAME, value=raw[7:-1])
         case "TARGET_IP":
-            return tok(TokenKind.TARGET_IP, value=m.group(1) or "")
+            # raw = '@ip:"1.2.3.4"'
+            return tok(TokenKind.TARGET_IP, value=raw[5:-1])
         case "TARGET_DIR":
-            return tok(TokenKind.TARGET_DIR, value=m.group(1) or "")
+            # raw = '@dir:"/some/path"'
+            return tok(TokenKind.TARGET_DIR, value=raw[6:-1])
         case "TARGET_BROADCAST":
             return tok(TokenKind.TARGET_BROADCAST)
 

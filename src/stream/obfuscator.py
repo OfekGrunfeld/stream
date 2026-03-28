@@ -51,7 +51,13 @@ _OPERATOR_MAP: list[tuple[str, str]] = [
     # Throttle: -+> and variants with multiple + chars handled as regex later
 ]
 
-_OPERATOR_REVERSE: list[tuple[str, str]] = [(f, h) for h, f in reversed(_OPERATOR_MAP)]
+# Sort reverse map longest-fucked-form first so multi-glyph sequences (e.g. ≀⟶)
+# are replaced before their sub-sequences (e.g. ⟶).
+_OPERATOR_REVERSE: list[tuple[str, str]] = sorted(
+    [(f, h) for h, f in _OPERATOR_MAP],
+    key=lambda pair: len(pair[0]),
+    reverse=True,
+)
 
 # Keyword / delimiter map
 _KEYWORD_MAP: list[tuple[str, str]] = [

@@ -1,0 +1,21 @@
+⟨⟨ Error-handling demo
+
+   ↯  is the error stream: packets on it signal faults.
+   ↯⃝  is the catch stream: it intercepts error packets before
+         they propagate and routes them to a handler gyge.
+
+   Flow:
+       ⌈bad_value⌉ ↯ ⌈handler⌉   <- error arrives at handler
+       ⌈handler⌉ ⟶ ⌈print⌉         <- handler emits a message
+
+   Expected output:
+       caught error: -1
+⟩⟩
+
+§header§
+    <o⟶ "error_handling"
+
+§body§
+    ⌈bad_value⌉ ≔ -1
+    ⌈handler⌉   ≔ "caught error: "
+    ⌈bad_value⌉ ↯ ⌈print⌉

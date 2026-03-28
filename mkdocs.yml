@@ -129,6 +129,16 @@ plugins:
 
 nav:
   - Home: index.md
+  - Guide:
+      - Overview: guide/overview.md
+      - Installation: guide/install.md
+      - Usage: guide/usage.md
+  - Reference:
+      - Stream Operators: reference/operators.md
+      - Built-in Gyges: reference/builtins.md
+      - Obfuscator: reference/obfuscator.md
+      - CLI: reference/cli.md
+      - Header Config: reference/config.md
 
 
 # Optional strictness:

@@ -1,71 +1,62 @@
-# Stream (WIP)
+---
+title: Stream
+description: A reactive dataflow esolang where programs are pipelines and entropy is a runtime primitive.
+---
 
-Stream is a tiny stream-centric language where programs are pipelines and behavior is described as *flow*.
+# Stream
 
-The interpreter is `sti`. A Stream program is a text file (commonly `*.program`) that defines:
-- optional metadata (season, drift)
-- gyge bindings (imports / builtins)
-- a single entrypoint called `spring`
-
-## Hello, world
+**Stream** is a reactive dataflow esoteric language where the only unit of computation is a *gyge* — a named node that holds a value, transforms it, or sinks it — and programs are described entirely as flow graphs.
 
 ```stream
-<-> Hello, Stream!
+::header::
+    <o-> "hello"
 
-gyge stdout -:> <o>::fd::stdout;
-
-season -:> spring;
-drift -:> gentle;
-
-spring -:> {
-  "Hello, world!" -> stdout
-}
+::body::
+    |greeting| := "Hello, Stream!"
+    |greeting| -> |print|
 ```
 
-### What this means
-#### Comments
-- `<->` starts a comment line:
-- `<->` This is a comment
+**Expected output**
 
-#### Imports / bindings (gyge)
-A gyge is a named node/operator you can use in the program.
-You bind a gyge name to an imported symbol:
-```stream
-gyge stdout -:> <o>::fd::stdout;
 ```
-Where `stdout` is the gyge name used in your pipeline.
-- `<o>` is a module meaning “this process” (a safe, process-scoped OS surface)
-
-- `::` traverses namespaces inside that module.:
-`<o>::fd::stdout` resolves to a callable sink that prints to standard output
-
-### Season and drift
-These are program-level modifiers:
-```stream
-season -:> spring;
-drift  -:> gentle;
+Hello, Stream!
 ```
-They are currently metadata (and/or runtime policy knobs), and are intended to influence scheduling/behavior as the language grows.
 
-### Entrypoint and pipelines
-Every program starts at a season:
-```stream
-spring -:> { ... }
-```
-### Running
-From the project root:
-```shell
-uv run python -m sti path/to/hello.program
-```
-Or, if you expose a CLI entrypoint (recommended):
-```shell
-uv run sti path/to/hello.st
-```
-### Current status
-This project is intentionally small and evolving:
+---
 
-The syntax is stabilized around gyge, season/drift, spring, and ->.
+## What makes Stream different
 
-The import model uses `<module>::path::symbol`.
+| Concept | Description |
+|---------|-------------|
+| **Single type** | Everything is a *gyge* — variable, function, or sink |
+| **Left-to-right flow** | `\|a\| -> \|b\| -> \|c\|` is the core expression form |
+| **20 stream operators** | `->` `=>` `~>` `-!->` `-!!->` `<~` and 14 more |
+| **Entropy** | A runtime value (0–100 Ch) that influences delivery, corruption, and termination |
+| **Seasons** | Program-level modifiers (`spring`, `summer`, `autumn`, `winter`) that shift entropy physics |
+| **Obfuscation** | Source can be mechanically transformed into a glyph-dense *fucked form* at levels 0–9 |
 
-More stream operators (=>, ~>, filters, pack/unpack, errors/signals) will arrive as the interpreter grows.
+---
+
+## Quick links
+
+<div class="grid cards" markdown>
+
+- **[Install →](guide/install.md)**
+  Get Stream running with `uv`.
+
+- **[Overview →](guide/overview.md)**
+  Core concepts: gyges, edges, entropy.
+
+- **[Usage →](guide/usage.md)**
+  Run, lex, parse, obfuscate from the CLI.
+
+- **[Stream operators →](reference/operators.md)**
+  All 20 edge types with syntax and semantics.
+
+- **[Built-in gyges →](reference/builtins.md)**
+  `print`, `upper`, `str`, `len`, and friends.
+
+- **[Obfuscator →](reference/obfuscator.md)**
+  Levels 0–9, symbol tables, round-trip deobfuscation.
+
+</div>

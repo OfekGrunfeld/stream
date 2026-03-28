@@ -9,7 +9,6 @@ from stream.runtime.entropy import (
     GarbageCascadeEvent,
     ModifierShiftEvent,
     NodeDisasterEvent,
-    ParasiteInjectionEvent,
     StreamDisruptionEvent,
 )
 from stream.runtime.state import RuntimeState

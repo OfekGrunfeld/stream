@@ -7,10 +7,9 @@ and returns an ASG that the graph builder then converts to runtime GIR/SCD struc
 
 from __future__ import annotations
 
+import uuid
 from dataclasses import dataclass, field
 from enum import StrEnum
-from typing import Union
-import uuid
 
 from stream.errors import ParseError
 from stream.lexer import Token, TokenKind, lex
@@ -88,7 +87,7 @@ class BranchBlockNode:
     node_id: NodeId = field(default_factory=_new_id)
 
 
-AnyNode = Union[GygeNode, LiteralNode, ModifierNode, TargetNode, VoidNode, BranchBlockNode]
+AnyNode = GygeNode | LiteralNode | ModifierNode | TargetNode | VoidNode | BranchBlockNode
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -197,16 +196,16 @@ class ParasiteDeclStmt:
     body_raw: str  # raw text of the body (parsed lazily)
 
 
-AnyStmt = Union[
-    AssignStmt,
-    AllocStmt,
-    DeallocStmt,
-    EntryPointStmt,
-    ImportStmt,
-    ModifierSetStmt,
-    SignalReceiveStmt,
-    ParasiteDeclStmt,
-]
+AnyStmt = (
+    AssignStmt
+    | AllocStmt
+    | DeallocStmt
+    | EntryPointStmt
+    | ImportStmt
+    | ModifierSetStmt
+    | SignalReceiveStmt
+    | ParasiteDeclStmt
+)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -399,15 +398,21 @@ class _Parser:
                 self._add_stmt(DeallocStmt(target=node))
 
             case TokenKind.IMPORT_STMT:
-                stmt = self._parse_import()
-                self._asg.imports.append(stmt)
+                self._asg.imports.append(self._parse_import())
 
-            case TokenKind.MOD_SEASON | TokenKind.MOD_ENTROPY | TokenKind.MOD_TEMP | TokenKind.MOD_TIME:
+            case (
+                TokenKind.MOD_SEASON
+                | TokenKind.MOD_ENTROPY
+                | TokenKind.MOD_TEMP
+                | TokenKind.MOD_TIME
+            ):
                 self._parse_modifier_set()
 
             case TokenKind.GYGE:
                 # Could be: assignment OR stream chain start
-                if self._pos + 1 < len(self._tokens) and self._tokens[self._pos + 1].kind == TokenKind.ASSIGN:
+                has_next = self._pos + 1 < len(self._tokens)
+                next_kind = self._tokens[self._pos + 1].kind if has_next else None
+                if next_kind == TokenKind.ASSIGN:
                     self._parse_assignment()
                 else:
                     self._parse_stream_chain()
@@ -462,7 +467,7 @@ class _Parser:
                 if self._check(TokenKind.AMP_COMPOSE):
                     self._advance()
                     other_tok = self._expect(TokenKind.GYGE)
-                    other = self._get_or_create_gyge(other_tok.value, other_tok.value2)
+                    self._get_or_create_gyge(other_tok.value, other_tok.value2)
                     # Create composed gyge
                     composed = GygeNode(name=node.name, hint="pipeline")
                     self._add_stmt(AssignStmt(target=node, rhs=rhs_node))
@@ -614,7 +619,14 @@ class _Parser:
             case TokenKind.MOD_ENTROPY:
                 self._advance()
                 return ModifierNode(kind="entropy")
-            case TokenKind.TARGET_PID | TokenKind.TARGET_PORT | TokenKind.TARGET_NAME | TokenKind.TARGET_IP | TokenKind.TARGET_DIR | TokenKind.TARGET_BROADCAST:
+            case (
+                TokenKind.TARGET_PID
+                | TokenKind.TARGET_PORT
+                | TokenKind.TARGET_NAME
+                | TokenKind.TARGET_IP
+                | TokenKind.TARGET_DIR
+                | TokenKind.TARGET_BROADCAST
+            ):
                 return self._parse_target_or_modifier()
             case TokenKind.LBRACE:
                 return self._parse_branch_block()

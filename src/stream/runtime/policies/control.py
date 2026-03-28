@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import random
 
-from stream.runtime.types import Ch, EdgeState, Packet, SCD, StreamKind
 from stream.runtime.policies.base import POLICY_REGISTRY
+from stream.runtime.types import SCD, Ch, EdgeState, Packet, StreamKind
 
 __all__ = ["BlockedPolicy", "ThrottlePolicy", "FastPolicy"]
 

@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from stream.runtime.types import Ch, Packet, SCD, StreamKind
 from stream.runtime.policies.base import POLICY_REGISTRY
+from stream.runtime.types import SCD, Ch, Packet, StreamKind
 
 __all__ = ["FeedbackPolicy"]
 

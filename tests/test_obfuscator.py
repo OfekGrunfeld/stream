@@ -6,7 +6,6 @@ import pytest
 
 from stream.obfuscator import ObfuscatorResult, deobfuscate, obfuscate
 
-
 # ──────────────────────────────────────────────────────────────────────────────
 # Level 0 — identity
 # ──────────────────────────────────────────────────────────────────────────────

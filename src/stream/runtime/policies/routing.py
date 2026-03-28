@@ -1,13 +1,20 @@
-"""Routing policies: -/> filter, -/|cond|\\-> switch, -#-> batcher, -...-> splitter, -|-> arg-filter."""
+"""Routing policies: filter, switch, batcher, splitter, arg-filter."""
 
 from __future__ import annotations
 
 import random
 
-from stream.runtime.types import Ch, Packet, SCD, StreamKind
 from stream.runtime.policies.base import POLICY_REGISTRY
+from stream.runtime.types import SCD, Ch, Packet, StreamKind
 
-__all__ = ["FilterPolicy", "FilterCondPolicy", "SwitchPolicy", "BatcherPolicy", "SplitterPolicy", "ArgFilterPolicy"]
+__all__ = [
+    "FilterPolicy",
+    "FilterCondPolicy",
+    "SwitchPolicy",
+    "BatcherPolicy",
+    "SplitterPolicy",
+    "ArgFilterPolicy",
+]
 
 _rng = random.Random()
 
@@ -268,8 +275,8 @@ class ArgFilterPolicy:
         elif entropy >= 25.0 and _rand() < 0.03:
             pos = max(0, pos + _rng.choice([-1, 1]))
 
-        if isinstance(val, (list, tuple)) and pos < len(val):  # type: ignore[arg-type]
-            extracted = val[pos]  # type: ignore[index]
+        if isinstance(val, (list, tuple)) and pos < len(val):
+            extracted = val[pos]
         else:
             extracted = val
 

@@ -18,7 +18,7 @@ from collections import deque
 from stream.runtime.policies import POLICY_REGISTRY
 from stream.runtime.policies.error import ErrorEvent
 from stream.runtime.state import RuntimeState
-from stream.runtime.types import EdgeState, GIR, Packet, SCD, StreamKind
+from stream.runtime.types import SCD, EdgeState, StreamKind
 
 __all__ = ["Phase3Delivery"]
 

@@ -10,7 +10,7 @@ from __future__ import annotations
 from collections import deque
 
 from stream.runtime.state import RuntimeState
-from stream.runtime.types import ActivationState, GIR, GygShape, Packet
+from stream.runtime.types import GIR, ActivationState, GygShape, Packet
 
 __all__ = ["Phase4Activation"]
 
@@ -101,7 +101,7 @@ class Phase4Activation:
             case GygShape.FUNCTION:
                 if callable(gir.fn_body):
                     try:
-                        result = gir.fn_body(packet.value)  # type: ignore[operator]
+                        result = gir.fn_body(packet.value)
                         output = Packet(
                             value=result,
                             origin_id=gir.node_id,

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from stream.runtime.types import Ch, EdgeState, Packet, SCD, StreamKind
+from stream.runtime.types import SCD, Ch, Packet, StreamKind
 
 __all__ = ["StreamPolicy", "PolicyRegistry", "POLICY_REGISTRY"]
 

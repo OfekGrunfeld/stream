@@ -119,7 +119,7 @@ class ModifierEngine:
 
     __slots__ = ()
 
-    def tick(self, state: "RuntimeState") -> float:
+    def tick(self, state: RuntimeState) -> float:
         """Advance modifier state for one tick.
 
         Returns:

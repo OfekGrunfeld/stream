@@ -10,11 +10,11 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from stream.runtime.types import (
+    GIR,
+    SCD,
     Ch,
     EdgeId,
-    GIR,
     NodeId,
-    SCD,
     Season,
     TypeRegistry,
 )
@@ -62,7 +62,7 @@ class RuntimeState:
     entropy_floor: Ch = 5.0
     entropy_decay_rate: float = 1.0
     entropy_sink_rate: float = 1.0
-    pending_entropy_events: list["EntropyEvent"] = field(default_factory=list)
+    pending_entropy_events: list[EntropyEvent] = field(default_factory=list)
 
     # Modifiers
     season: Season = Season.WINTER

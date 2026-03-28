@@ -13,23 +13,19 @@ from __future__ import annotations
 import random
 from collections import defaultdict, deque
 
-from stream.errors import BuildError
 from stream.parser import (
     AllocStmt,
     AnyNode,
     AnyStmt,
     AssignStmt,
     BranchBlockNode,
-    DeallocStmt,
     EntryPointStmt,
     GygeNode,
-    ImportStmt,
     LiteralNode,
     ModifierNode,
     ModifierSetStmt,
     ProgramASG,
     Section,
-    SignalReceiveStmt,
     StreamEdge,
     TargetNode,
     VoidNode,
@@ -39,12 +35,11 @@ from stream.runtime.gyge import GyrResolver
 from stream.runtime.state import ProgramConfig, RuntimeState
 from stream.runtime.types import (
     GIR,
+    SCD,
     GygShape,
     Packet,
-    SCD,
     Season,
     StreamKind,
-    TypeRegistry,
 )
 
 __all__ = ["build", "GraphBuilder"]
@@ -100,7 +95,7 @@ class GraphBuilder:
         state.wind_enabled = self._cfg.wind_enabled
 
         # Step 1: Create GIR nodes for all named gyges
-        for name, ast_node in self._asg.nodes.items():
+        for _name, ast_node in self._asg.nodes.items():
             gir = self._make_gir(ast_node)
             state.add_node(gir)
             self._ast_to_runtime_id[ast_node.node_id] = gir.node_id
@@ -197,7 +192,7 @@ class GraphBuilder:
 
     def _apply_stmt(self, stmt: AnyStmt, state: RuntimeState) -> None:
         match stmt:
-            case EntryPointStmt(name=name):
+            case EntryPointStmt():
                 state.config.entropy_initial = state.entropy  # keep current
 
             case ModifierSetStmt(modifier="season", value=val):
@@ -226,7 +221,7 @@ class GraphBuilder:
                 if gir is None:
                     return
                 match rhs:
-                    case LiteralNode(value=val):
+                    case LiteralNode(value=val):  # type: ignore[misc]
                         gir.stored_value = val
                         gir.shape = GygShape.VARIABLE
                     case VoidNode():

@@ -7,11 +7,18 @@ State mutation happens only in Phase 0 of the tick loop.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import StrEnum
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from stream.runtime.types import Ch, DisasterKind, EdgeId, EntropyTier, NodeId, StreamKind, entropy_tier
+from stream.runtime.types import (
+    Ch,
+    DisasterKind,
+    EdgeId,
+    EntropyTier,
+    NodeId,
+    StreamKind,
+    entropy_tier,
+)
 
 if TYPE_CHECKING:
     from stream.runtime.state import RuntimeState
@@ -151,7 +158,7 @@ def _disaster_prob(kind: DisasterKind, entropy: Ch, season: str) -> float:
 # ──────────────────────────────────────────────────────────────────────────────
 
 
-def compute_delta(state: "RuntimeState") -> tuple[Ch, list[EntropyEvent]]:
+def compute_delta(state: RuntimeState) -> tuple[Ch, list[EntropyEvent]]:
     """Compute entropy delta for this tick (Phase 0 computation, read-only).
 
     Returns:
@@ -189,7 +196,7 @@ def compute_delta(state: "RuntimeState") -> tuple[Ch, list[EntropyEvent]]:
             delta += premium * state.config.entropy_decay_rate
 
     # Parasite activity
-    for parasite in state.active_parasites:
+    for _parasite in state.active_parasites:
         # Each active parasite contributes based on its state
         # (simplified: +0.4 Ch/tick feeding, +0.1 Ch/tick dormant)
         delta += 0.20 * state.config.parasite_rate  # average
@@ -254,10 +261,10 @@ class EntropyEngine:
         self._decay_rate = decay_rate
         self._sink_rate = sink_rate
 
-    def tick(self, state: "RuntimeState") -> tuple[Ch, list[EntropyEvent]]:
+    def tick(self, state: RuntimeState) -> tuple[Ch, list[EntropyEvent]]:
         return compute_delta(state)
 
-    def apply_vent(self, state: "RuntimeState", amount: Ch) -> Ch:
+    def apply_vent(self, state: RuntimeState, amount: Ch) -> Ch:
         """SDK vent: drain up to 10 Ch, returns actual drained."""
         actual = min(10.0, amount)
         return actual * self._sink_rate

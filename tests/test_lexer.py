@@ -4,9 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from stream.errors import LexError
 from stream.lexer import Token, TokenKind, lex
-
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Helpers

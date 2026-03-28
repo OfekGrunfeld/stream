@@ -10,9 +10,8 @@ Commands:
 
 from __future__ import annotations
 
-import sys
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 import typer
 from rich.console import Console
@@ -47,7 +46,7 @@ def run_program(
         int, typer.Option("--tick-limit", "-t", help="Maximum tick count")
     ] = 100_000,
     seed: Annotated[
-        Optional[int], typer.Option("--seed", "-s", help="RNG seed for reproducibility")
+        int | None, typer.Option("--seed", "-s", help="RNG seed for reproducibility")
     ] = None,
     hud: Annotated[bool, typer.Option("--hud/--no-hud", help="Live HUD display")] = True,
     hud_interval: Annotated[
@@ -77,10 +76,10 @@ def run_program(
         asg = parse(source, filename=str(file))
     except LexError as exc:
         _err_console.print(f"[red]Lex error:[/red] {exc}")
-        raise typer.Exit(code=2)
+        raise typer.Exit(code=2) from exc
     except ParseError as exc:
         _err_console.print(f"[red]Parse error:[/red] {exc}")
-        raise typer.Exit(code=2)
+        raise typer.Exit(code=2) from exc
 
     # ── Build graph ───────────────────────────────────────────────────────────
     cfg = ProgramConfig(
@@ -98,10 +97,8 @@ def run_program(
 
     with HUD(state, enabled=hud, tick_interval=hud_interval, console=_console) as display:
         # Patch loop to call display after each tick
-        original_run = loop.run
 
         def run_with_hud(s):  # type: ignore[no-untyped-def]
-            from stream.runtime.types import ActivationState, EdgeState, GygShape
 
             tick_limit_inner = s.config.tick_limit
             quiescent_count = 0
@@ -123,7 +120,7 @@ def run_program(
                     display.render_final(TerminationReason.TERMINAL_CASCADE)
                     return TerminationReason.TERMINAL_CASCADE
 
-                from stream.runtime.loop import _is_quiescent, TerminationReason
+                from stream.runtime.loop import TerminationReason, _is_quiescent
                 if _is_quiescent(s):
                     quiescent_count += 1
                     if quiescent_count >= loop._max_quiescent:
@@ -136,7 +133,7 @@ def run_program(
             display.render_final(TerminationReason.TICK_LIMIT)
             return TerminationReason.TICK_LIMIT
 
-        reason = run_with_hud(state)
+        run_with_hud(state)
 
     raise typer.Exit(code=state.exit_code if state.exit_code is not None else 0)
 
@@ -161,7 +158,7 @@ def lex_file(
         tokens = lex(file.read_text(encoding="utf-8"), filename=str(file))
     except LexError as exc:
         _err_console.print(f"[red]Lex error:[/red] {exc}")
-        raise typer.Exit(code=2)
+        raise typer.Exit(code=2) from exc
 
     from rich.table import Table
 
@@ -205,7 +202,7 @@ def parse_file(
         asg = parse(file.read_text(encoding="utf-8"), filename=str(file))
     except (LexError, ParseError) as exc:
         _err_console.print(f"[red]Error:[/red] {exc}")
-        raise typer.Exit(code=2)
+        raise typer.Exit(code=2) from exc
 
     _console.print(f"[bold]Nodes[/bold] ({len(asg.nodes)}):")
     for name, node in asg.nodes.items():
@@ -232,7 +229,7 @@ def obfuscate_file(
     file: Annotated[Path, typer.Argument(help="Path to .stm source file")],
     level: Annotated[int, typer.Option("--level", "-l", help="Obfuscation level (1-10)")] = 5,
     output: Annotated[
-        Optional[Path], typer.Option("--output", "-o", help="Output path")
+        Path | None, typer.Option("--output", "-o", help="Output path")
     ] = None,
 ) -> None:
     """Obfuscate a Stream source file."""
@@ -240,7 +237,7 @@ def obfuscate_file(
         from stream.obfuscator import obfuscate
     except ImportError:
         _err_console.print("[yellow]Obfuscator not yet implemented (Phase 8).[/yellow]")
-        raise typer.Exit(code=3)
+        raise typer.Exit(code=3) from None
 
     if not file.exists():
         _err_console.print(f"[red]Error:[/red] file not found: {file}")
@@ -256,7 +253,7 @@ def obfuscate_file(
 def deobfuscate_file(
     file: Annotated[Path, typer.Argument(help="Path to obfuscated .stm file")],
     output: Annotated[
-        Optional[Path], typer.Option("--output", "-o", help="Output path")
+        Path | None, typer.Option("--output", "-o", help="Output path")
     ] = None,
 ) -> None:
     """Deobfuscate a Stream source file."""
@@ -264,7 +261,7 @@ def deobfuscate_file(
         from stream.obfuscator import deobfuscate
     except ImportError:
         _err_console.print("[yellow]Obfuscator not yet implemented (Phase 8).[/yellow]")
-        raise typer.Exit(code=3)
+        raise typer.Exit(code=3) from None
 
     if not file.exists():
         _err_console.print(f"[red]Error:[/red] file not found: {file}")

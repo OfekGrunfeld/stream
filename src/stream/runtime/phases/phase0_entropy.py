@@ -8,8 +8,6 @@ so later phases see the correct tier).
 
 from __future__ import annotations
 
-from typing import Protocol
-
 from stream.runtime.entropy import EntropyEngine
 from stream.runtime.state import RuntimeState
 from stream.runtime.types import Ch

@@ -15,15 +15,14 @@ from stream.runtime.phases.phase9_gc import Phase9GC
 from stream.runtime.policies.base import POLICY_REGISTRY
 from stream.runtime.state import ProgramConfig, RuntimeState
 from stream.runtime.types import (
+    GIR,
+    SCD,
     ActivationState,
     EdgeState,
-    GIR,
     GygShape,
     Packet,
-    SCD,
     StreamKind,
 )
-
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Helpers
@@ -144,7 +143,7 @@ class TestPhase3Delivery:
         state = _make_state()
         src = GIR(name="src", shape=GygShape.VARIABLE)
         dst = GIR(name="dst", shape=GygShape.VOID)
-        scd = _add_edge(state, src, dst)
+        _add_edge(state, src, dst)
 
         src.output_ports["default"] = deque([_packet(42)])
 
@@ -192,7 +191,7 @@ class TestPhase3Delivery:
         state = _make_state()
         src = GIR(name="src", shape=GygShape.VARIABLE)
         dst = GIR(name="dst", shape=GygShape.VOID)
-        scd = _add_edge(state, src, dst, StreamKind.EXIT)
+        _add_edge(state, src, dst, StreamKind.EXIT)
 
         src.output_ports["default"] = deque([_packet(0)])
         Phase3Delivery().execute(state)
@@ -257,7 +256,8 @@ class TestPhase4Activation:
 
     def test_lazy_shape_resolution_from_callable(self):
         state = _make_state()
-        fn = lambda v: v
+        def fn(v):
+            return v
         gir = GIR(name="lazy")
         state.add_node(gir)
         gir.input_ports["default"] = deque([_packet(fn)])

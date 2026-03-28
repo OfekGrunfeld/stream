@@ -16,10 +16,9 @@ Levels 5–9 require the symbol table (returned as a separate dict).
 
 from __future__ import annotations
 
-import re
 import random
+import re
 from dataclasses import dataclass, field
-from typing import Optional
 
 __all__ = ["obfuscate", "deobfuscate", "ObfuscatorResult"]
 
@@ -118,7 +117,7 @@ _RE_NUMBER = re.compile(r'\b(\d+(?:\.\d+)?)\b')
 _SCRAMBLE_CHARS = "⋮⋯⋰⋱⋲⋳⋴⋵⋶⋷⋸⋹⋺⋻⋼⋽⋾⋿"
 
 
-def _make_scrambler(seed: int) -> "IdentifierScrambler":
+def _make_scrambler(seed: int) -> IdentifierScrambler:
     return IdentifierScrambler(seed=seed)
 
 
@@ -328,7 +327,7 @@ def obfuscate(
     source: str,
     level: int = 5,
     seed: int = 0,
-    symbol_table: Optional[dict[str, str]] = None,
+    symbol_table: dict[str, str] | None = None,
 ) -> ObfuscatorResult:
     """Convert human-readable Stream source to fucked form at the given level.
 
@@ -382,7 +381,7 @@ def obfuscate(
 
 def deobfuscate(
     source: str,
-    symbol_table: Optional[dict[str, str]] = None,
+    symbol_table: dict[str, str] | None = None,
     seed: int = 0,
 ) -> str:
     """Convert fucked-form Stream source back to human-readable.

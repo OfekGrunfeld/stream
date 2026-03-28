@@ -10,7 +10,7 @@ from collections import deque
 
 from stream.runtime.policies.signal import SignalEvent
 from stream.runtime.state import RuntimeState
-from stream.runtime.types import Packet, StreamKind
+from stream.runtime.types import StreamKind
 
 __all__ = ["Phase6Signals"]
 

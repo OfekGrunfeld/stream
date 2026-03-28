@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections import deque
 
 from stream.runtime.state import RuntimeState
-from stream.runtime.types import EdgeState, Packet, StreamKind
+from stream.runtime.types import StreamKind
 
 __all__ = ["Phase7Wait"]
 
@@ -27,7 +27,7 @@ class Phase7Wait:
             policy = _get_wait_policy()
             effective_entropy = state.effective_entropy(scd.local_entropy)
 
-            if policy.should_deliver(scd.buffer[0], scd, effective_entropy):
+            if policy.should_deliver(scd.buffer[0], scd, effective_entropy):  # type: ignore[attr-defined]
                 # Release all held packets to destination input
                 dst = state.get_node(scd.dest_id)
                 if dst is not None:

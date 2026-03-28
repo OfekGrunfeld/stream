@@ -78,9 +78,9 @@ def _entropy_bar(entropy: float, width: int = 30) -> Text:
     return t
 
 
-def _modifier_line(state: "RuntimeState") -> str:
+def _modifier_line(state: RuntimeState) -> str:
     season_str = state.season.value.capitalize()
-    season_lock = f" [locked]" if state.season_lock else ""
+    season_lock = " [locked]" if state.season_lock else ""
     return (
         f"Season: {season_str}{season_lock}  "
         f"Temp: {state.temperature:4.1f} Fx  "
@@ -88,7 +88,7 @@ def _modifier_line(state: "RuntimeState") -> str:
     )
 
 
-def _node_table(state: "RuntimeState") -> Table:
+def _node_table(state: RuntimeState) -> Table:
     tbl = Table(title="Nodes", show_header=True, header_style="bold cyan", expand=False)
     tbl.add_column("Name", style="cyan", no_wrap=True)
     tbl.add_column("Shape", style="white")
@@ -112,7 +112,7 @@ def _node_table(state: "RuntimeState") -> Table:
     return tbl
 
 
-def _edge_table(state: "RuntimeState") -> Table:
+def _edge_table(state: RuntimeState) -> Table:
     tbl = Table(title="Edges", show_header=True, header_style="bold magenta", expand=False)
     tbl.add_column("Kind", style="magenta", no_wrap=True)
     tbl.add_column("State")
@@ -132,12 +132,12 @@ def _edge_table(state: "RuntimeState") -> Table:
     return tbl
 
 
-def render_tick(state: "RuntimeState", console: Console | None = None) -> None:
+def render_tick(state: RuntimeState, console: Console | None = None) -> None:
     """Render a single tick snapshot to the console (non-live mode)."""
     con = console or Console()
 
     tier = entropy_tier(state.entropy)
-    colour = _TIER_COLOUR[tier]
+    _TIER_COLOUR[tier]
 
     lines: list[Text | Table | str] = [
         Text(f"Tick #{state.tick}", style="bold white"),
@@ -173,7 +173,7 @@ class HUD:
 
     def __init__(
         self,
-        state: "RuntimeState",
+        state: RuntimeState,
         *,
         enabled: bool = True,
         tick_interval: int = 1,
@@ -184,7 +184,7 @@ class HUD:
         self._tick_interval = tick_interval
         self._console = console or Console()
 
-    def __enter__(self) -> "HUD":
+    def __enter__(self) -> HUD:
         return self
 
     def __exit__(self, *_: object) -> None:
@@ -202,7 +202,7 @@ class HUD:
             self._console.print(line)
         self._state.hud_lines.clear()
 
-    def render_final(self, reason: "TerminationReason") -> None:
+    def render_final(self, reason: TerminationReason) -> None:
         """Print termination summary."""
         if not self._enabled:
             return

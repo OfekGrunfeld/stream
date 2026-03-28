@@ -8,8 +8,8 @@ from __future__ import annotations
 import uuid
 from collections import deque
 from dataclasses import dataclass, field
-from enum import IntEnum, StrEnum
-from typing import Any, Union
+from enum import StrEnum
+from typing import Any
 
 __all__ = [
     "NodeId",
@@ -127,7 +127,7 @@ class StreamKind(StrEnum):
 # ──────────────────────────────────────────────────────────────────────────────
 
 # GyrValue is the set of all possible gyge runtime values
-GyrValue = Union[int, float, str, bytes, dict[str, Any], list[Any], None, object]
+GyrValue = int | float | str | bytes | dict[str, Any] | list[Any] | None | object
 
 
 @dataclass(slots=True)

@@ -5,8 +5,8 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from stream.runtime.types import Ch, NodeId, Packet, SCD, StreamKind
 from stream.runtime.policies.base import POLICY_REGISTRY
+from stream.runtime.types import SCD, Ch, NodeId, Packet, StreamKind
 
 __all__ = ["SignalPolicy", "ReceivePolicy", "SignalEvent"]
 

@@ -7,7 +7,7 @@ import pytest
 from stream.graph import build
 from stream.parser import parse
 from stream.runtime.state import ProgramConfig, RuntimeState
-from stream.runtime.types import ActivationState, GygShape, Season
+from stream.runtime.types import GygShape, Season
 
 
 def _build(src: str, **cfg_kwargs) -> RuntimeState:

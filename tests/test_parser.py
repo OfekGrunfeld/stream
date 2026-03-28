@@ -18,7 +18,6 @@ from stream.parser import (
     parse,
 )
 
-
 # ──────────────────────────────────────────────────────────────────────────────
 # Helpers
 # ──────────────────────────────────────────────────────────────────────────────
@@ -88,7 +87,7 @@ class TestStreamEdges:
     ])
     def test_operator_maps_to_kind(self, op: str, kind: StreamKind):
         if op == "<~":
-            src = f"::body::\n    |a| -> |b|\n    |b| <~ |a|"
+            src = "::body::\n    |a| -> |b|\n    |b| <~ |a|"
         else:
             src = f"::body::\n    |a| {op} |b|"
         asg = _parse(src)

@@ -13,9 +13,8 @@ Longest-match rules (critical precedence):
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import StrEnum
-from typing import Iterator
 
 from stream.errors import LexError
 
@@ -282,7 +281,7 @@ def lex(source: str, filename: str = "<stdin>") -> list[Token]:
         if kind_name == "ILLEGAL":
             raise LexError(f"Unexpected character {raw!r}", line, col)
 
-        tok = _build_token(kind_name, m, raw, line, col)
+        tok = _build_token(kind_name or "", m, raw, line, col)
         if tok is not None:
             tokens.append(tok)
 

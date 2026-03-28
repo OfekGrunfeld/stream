@@ -1,0 +1,19 @@
+⟨⟨ Pipeline demo
+
+   A multi-step transformation chain:
+       value ⟶ str ⟶ upper ⟶ print
+
+   Shows that Stream chains are composable and left-to-right.
+   Each gyge in the chain receives from the previous and emits to the next.
+
+   Expected output:
+       STREAM LANGUAGE IS REACTIVE
+⟩⟩
+
+§header§
+    <o⟶ "pipeline"
+    𝕊 ≔ spring
+
+§body§
+    ⌈sentence⌉ ≔ "stream language is reactive"
+    ⌈sentence⌉ ⟶ ⌈upper⌉ ⟶ ⌈print⌉

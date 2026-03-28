@@ -1,0 +1,18 @@
+<-- Counter demo
+
+   Demonstrates numeric values flowing through |str| → |print|.
+   Also shows that multiple independent gyges can be declared
+   and chained without interference.
+
+   Expected output:
+       Items counted: 7
+-->
+
+::header::
+    <o-> "counter"
+    $S := spring
+
+::body::
+    |count|  := 7
+    |label|  := "Items counted: "
+    |count|  -> |str| -> |print|

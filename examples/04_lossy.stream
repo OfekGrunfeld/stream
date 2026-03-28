@@ -1,0 +1,22 @@
+<-- Lossy stream demo
+
+   The ~> (lossy) operator drops packets probabilistically.
+   At low entropy the delivery rate is high; as entropy rises
+   packets are increasingly silenced.
+
+   This example declares a message and sends it through a lossy
+   edge.  At default entropy (0) the message will almost always
+   arrive.  Crank $entropy to 80+ in the header to watch it
+   vanish.
+
+   Expected output (entropy=0):
+       maybe you'll see this
+-->
+
+::header::
+    <o-> "lossy"
+    $entropy := 0
+
+::body::
+    |msg| := "maybe you'll see this"
+    |msg| ~> |print|

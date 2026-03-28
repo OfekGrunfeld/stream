@@ -248,7 +248,7 @@ def obfuscate_file(
 
     result = obfuscate(file.read_text(encoding="utf-8"), level=level)
     out_path = output or file.with_suffix(".obf.stm")
-    out_path.write_text(result, encoding="utf-8")
+    out_path.write_text(result.source, encoding="utf-8")
     _console.print(f"[green]Obfuscated:[/green] {out_path}")
 
 
